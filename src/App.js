@@ -1,37 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import TodoList from './toDoList';
-import TodoInput from './todoForm';
+import React,{useState} from 'react'
+import Todo from './todo';
+import TodoForm from './todoForm';
+function App() {
+  const [todos, setTodo] = useState([
+    {text: 'learn about react',
+     isCompleted: false},
+    {text: 'meet friend',
+      isCompleted: false}
+  ]);
 
-class App extends React.Component {
-
-  state={
-    todos:[]
+  const addTodo = text => {
+    const newTodo = [...todos, {text}];
+    setTodo(newTodo);
   }
 
-  addTodo = todo => {
-    let newTodo = [todo,...this.state.todos];
-    this.setState({
-        todos: newTodo
-    })
-}
+  const completeTodo = index => {
+    const newTodos = [...todos];
+    newTodos[index].isCompleted = true;
+    setTodo(newTodos);
+  }
 
-  render() {
-    return(
-      <div className="App">
-        <TodoInput onSubmit = {this.addTodo} />
-        <TodoList todos={this.state.todos}/>
+  const deleteTodo = index => {
+    const newTodos = [...todos];
+    newTodos.splice(index,1);
+    setTodo(newTodos);
+  }
+
+  return(
+    <div className="app">
+      <div className="todo-list">
+        {todos.map((todo,index)=> (<Todo key={index} index={index} todo={todo} completeTodo={completeTodo} deleteTodo={deleteTodo}></Todo>))}
       </div>
-    )
-  }
-  
-  // render (
-  //   <div className="App">
-  //     <TodoInput onSubmit={this.addTodo}/>
-  //     <TodoList />
-  //   </div>
-  // );
+      <div className="todo-form">
+        <TodoForm addTodo={addTodo}></TodoForm>
+      </div>
+    </div>
+  )
+
 }
 
 export default App;
